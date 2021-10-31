@@ -20,6 +20,8 @@ public class Player : MonoBehaviour
     [SerializeField] private InputAction inputJump;
 
     [SerializeField] private InputAction inputSprint;
+    
+    [SerializeField] private InputAction inputPause;
     [SerializeField] float drag=0;
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip[] audioClip;
@@ -34,6 +36,7 @@ public class Player : MonoBehaviour
     Animator anim;
 
     [SerializeField] float jumpSpeed;
+    [SerializeField] GameObject pauseUI;
     bool isSliding = false;
     bool ateShit = false;
     bool wasSpring = false;
@@ -41,7 +44,8 @@ public class Player : MonoBehaviour
     bool sprinting = false;
     bool Tumble = false;
     bool wasBumped;
-
+    
+    bool paused=false;
     bool wasGrounded = false;
     // Start is called before the first frame update
     void Start()
@@ -53,7 +57,7 @@ public class Player : MonoBehaviour
 
         inputVertical.Enable();
         inputSprint.Enable();
-
+        inputPause.Enable();
     }
 
     // Update is called once per frame
@@ -64,7 +68,26 @@ public class Player : MonoBehaviour
     void Update()
     {
 
-        //    Debug.Log(up.ReadValue<float>());
+       
+
+        if(inputPause.triggered)
+        {
+            
+            if(paused)
+            {
+                paused=false;
+                pauseUI.SetActive(false);
+             
+            }
+            else
+            {
+                paused=true;
+                pauseUI.SetActive(true);
+               
+            }
+        }
+
+        
 
         if (Tumble)
         {
@@ -280,6 +303,11 @@ public class Player : MonoBehaviour
         transform.rotation= Quaternion.LookRotation(moveDirection);
         transform.Rotate(Vector3.right,90);
         wasBumped=false;
+    }
+    public void UnPause()
+    {
+        paused=false;
+        pauseUI.SetActive(false);
     }
 
 
