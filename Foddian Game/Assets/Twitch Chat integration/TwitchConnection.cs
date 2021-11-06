@@ -18,6 +18,7 @@ public class TwitchConnection : MonoBehaviour
     
     [SerializeField]  InputField Channeltxt;
     [SerializeField] GameObject LoginUI;
+    [SerializeField] GameObject[] ObjectsToEnable;
     const string URL="irc.chat.twitch.tv";
     const int PORT = 6667;
     string User;
@@ -41,6 +42,14 @@ public class TwitchConnection : MonoBehaviour
     [SerializeField] Animator[] BubblesAnim;
     int emoteSlotIDX=0;
     int messageCounter=0;
+
+    void Start()
+    {
+        foreach(GameObject obj in ObjectsToEnable)
+        {
+            obj.SetActive(false);
+        }
+    }
 
     void Awake()
     {
@@ -97,6 +106,10 @@ public class TwitchConnection : MonoBehaviour
             if(Twitch.Available>0)
             { 
                 LoginUI.SetActive(false);
+                foreach(GameObject obj in ObjectsToEnable)
+                {
+                    obj.SetActive(true);
+                }
                 string message = Reader.ReadLine();
                 //:puddingfighter_!puddingfighter_@puddingfighter_.tmi.twitch.tv PRIVMSG #puddingfighter_ :fuck
                 //:jaredthesheik!jaredthesheik@jaredthesheik.tmi.twitch.tv PRIVMSG #puddingfighter_ :nice
@@ -176,5 +189,9 @@ public class TwitchConnection : MonoBehaviour
     public void CloseMenu()
     {
         LoginUI.SetActive(false);
+        foreach(GameObject obj in ObjectsToEnable)
+        {
+            obj.SetActive(true);
+        }
     }
 }
